@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     const getBooks = async () => {
       const response = await BooksAPI.getAll();
+      console.log(response);
       setBooks(response);
     };
     getBooks();

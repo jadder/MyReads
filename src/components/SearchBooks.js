@@ -9,11 +9,25 @@ const SearchBooks = ({
   setShowSearchpage,
   changeShelf,
 }) => {
-  const [search, setSearch] = useState("");
   const handleChange = (event) => {
     const value = event.target.value;
-    console.log(value);
-    setSearch(value);
+    setSearch(value.trim());
+  };
+
+  const [search, setSearch] = useState("");
+  const showingBooks = () => {
+    if (search === "") {
+      return books;
+    } else {
+      const books_filter = books.filter((b) => {
+        const combintedAuthors = b.authors.join(", ").toLowerCase();
+        return (
+          b.title.toLowerCase().includes(search.toLowerCase()) ||
+          combintedAuthors.includes(search.toLowerCase())
+        );
+      });
+      return books_filter;
+    }
   };
 
   return (
@@ -36,15 +50,11 @@ const SearchBooks = ({
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
-          {books
-            .filter((b) => {
-              return b;
-            })
-            .map((book) => {
-              return (
-                <Book key={book.id} bookData={book} changeShelf={changeShelf} />
-              );
-            })}
+          {showingBooks().map((book) => {
+            return (
+              <Book key={book.id} bookData={book} changeShelf={changeShelf} />
+            );
+          })}
         </ol>
       </div>
     </div>
